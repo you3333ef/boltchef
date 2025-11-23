@@ -44,5 +44,8 @@ app/commit.json
 changelogUI.md
 docs/instructions/Roadmap.md
 .cursorrules
-*.md
 .qodo
+
+# Markdown files (except integration docs)
+*.md
+!important/CHEF_INTEGRATION.md
