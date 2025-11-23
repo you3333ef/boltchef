@@ -7,11 +7,44 @@
 @use 'components/editor.scss';
 @use 'components/toast.scss';
 
-html,
-body {
+/* Complete CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
   height: 100%;
+  /* Ensure theme is applied */
+  background-color: var(--bolt-elements-bg-depth-1, #FFFFFF);
+  color: var(--bolt-elements-textPrimary, #0A0A0A);
+}
+
+body {
+  min-height: 100%;
   width: 100%;
-  background-color: var(--bolt-elements-bg-depth-1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bolt-elements-bg-depth-1, #FFFFFF);
+  color: var(--bolt-elements-textPrimary, #0A0A0A);
+  /* Ensure visibility */
+  overflow-x: hidden;
+}
+
+/* Ensure all text is visible */
+h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, textarea {
+  color: inherit;
+}
+
+/* Root element */
+#root {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--bolt-elements-bg-depth-1, #FFFFFF);
 }
 
 :root {

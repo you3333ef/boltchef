@@ -46,6 +46,9 @@ docs/instructions/Roadmap.md
 .cursorrules
 .qodo
 
-# Markdown files (except integration docs)
+# Markdown files (except integration docs and solution files)
 *.md
 !important/CHEF_INTEGRATION.md
+!إصلاح_الشاشة_السوداء.md
+!SOLUTION_SUMMARY.md
+!restore-original.sh
