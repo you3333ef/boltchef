@@ -54,10 +54,9 @@ export default defineConfig((config) => {
     },
     plugins: [
       nodePolyfills({
-        include: ['buffer', 'process', 'util', 'stream'],
+        include: ['buffer', 'util', 'stream'],
         globals: {
           Buffer: true,
-          process: true,
           global: true,
         },
         protocolImports: true,
