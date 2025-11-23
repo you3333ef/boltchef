@@ -18,6 +18,39 @@ export default defineConfig((config) => {
     },
     build: {
       target: 'esnext',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            // Exclude chef backend files from the build
+            if (id.includes('chef-') || id.includes('/knife/') || id.includes('/habitat/') || id.includes('/distro/') || id.includes('/lib/chef') || id.includes('/spec/') || id.includes('/tasks/')) {
+              return 'vendor-chef';
+            }
+            if (id.includes('node_modules')) {
+              if (id.includes('@remix-run') || id.includes('react') || id.includes('react-dom')) {
+                return 'react-vendor';
+              }
+              if (id.includes('@radix-ui') || id.includes('@uiw')) {
+                return 'ui-vendor';
+              }
+              return 'vendor';
+            }
+          },
+        },
+      },
+    },
+    optimizeDeps: {
+      exclude: [
+        // Exclude chef backend files from dependency optimization
+        'chef-bin',
+        'chef-config',
+        'chef-utils',
+        'knife',
+        'lib/chef',
+        'spec',
+        'tasks',
+        'habitat',
+        'distro',
+      ],
     },
     plugins: [
       nodePolyfills({

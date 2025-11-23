@@ -1,0 +1,14 @@
+chef-bin/
+chef-config/
+chef-utils/
+knife/
+lib/chef/
+spec/
+tasks/
+habitat/
+distro/
+*.rb
+*.gemspec
+Gemfile
+Gemfile.lock
+Rakefile
