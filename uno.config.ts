@@ -264,7 +264,7 @@ export default defineConfig({
  * ```
  */
 function generateAlphaPalette(hex: string) {
-  return [1, 2, 3, 4, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100].reduce(
+  return [1, 2, 3, 4, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100].reduce(
     (acc, opacity) => {
       const alpha = Math.round((opacity / 100) * 255)
         .toString(16)
