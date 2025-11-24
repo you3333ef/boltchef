@@ -7,30 +7,72 @@
   <meta name="description" content="BoltChef - AI-Powered Development Environment" />
   <meta name="theme-color" content="#8A5FFF" />
   <title>BoltChef</title>
+
+  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Preconnect to external resources -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+
+  <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
-  <script>
-    // Set theme before page loads to prevent flash
-    (function() {
-      let theme = localStorage.getItem('bolt_theme');
-      if (!theme) {
-        theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', theme);
-    })();
-  </script>
+
+  <!-- Inline critical CSS -->
   <style>
-    /* Loading styles to prevent blank screen */
+    /* CSS Reset and base styles */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      height: 100%;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    }
+
+    body {
+      min-height: 100%;
+      width: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* Theme variables */
+    :root {
+      --bg-light: #FFFFFF;
+      --bg-dark: #171717;
+      --text-light: #0A0A0A;
+      --text-dark: #FFFFFF;
+      --accent: #8A5FFF;
+      --accent-dark: #9C7DFF;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+    }
+
+    html[data-theme="dark"] {
+      color-scheme: dark;
+    }
+
+    /* Root container */
     #root {
       width: 100%;
       min-height: 100vh;
-      background-color: #FFFFFF;
+      background-color: var(--bg-light);
+      color: var(--text-light);
     }
+
     html[data-theme="dark"] #root {
-      background-color: #171717;
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
     }
+
+    /* Loading screen */
     .loading-screen {
       position: fixed;
       top: 0;
@@ -38,40 +80,161 @@
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 9999;
+      background-color: inherit;
+      gap: 20px;
     }
+
     html[data-theme="light"] .loading-screen {
-      background-color: #FFFFFF;
+      background-color: var(--bg-light);
     }
+
     html[data-theme="dark"] .loading-screen {
-      background-color: #171717;
+      background-color: var(--bg-dark);
     }
+
     .loading-spinner {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       border: 4px solid transparent;
-      border-top: 4px solid #8A5FFF;
+      border-top: 4px solid var(--accent);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
+
     html[data-theme="dark"] .loading-spinner {
-      border-top-color: #9C7DFF;
+      border-top-color: var(--accent-dark);
     }
+
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+    .loading-text {
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.7;
+    }
+
+    /* Error display */
+    .error-display {
+      display: none;
+      padding: 40px 20px;
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: #FEF2F2;
+      border: 2px solid #FECACA;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+
+    .error-display.visible {
+      display: block;
+    }
+
+    .error-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #DC2626;
+      margin-bottom: 1rem;
+    }
+
+    .error-message {
+      background-color: #FFFFFF;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.875rem;
+      color: #7F1D1D;
+      overflow: auto;
+      white-space: pre-wrap;
+      margin-bottom: 1rem;
+    }
+
+    .reload-button {
+      padding: 10px 20px;
+      background-color: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .reload-button:hover {
+      background-color: #7645E8;
+    }
   </style>
+
+  <!-- Theme initialization script -->
+  <script>
+    (function() {
+      try {
+        // Set theme before page loads to prevent flash
+        let theme = localStorage.getItem('bolt_theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+        console.log('✅ Theme initialized:', theme);
+      } catch (error) {
+        console.error('❌ Error initializing theme:', error);
+      }
+    })();
+  </script>
+
+  <!-- Error monitoring script -->
+  <script>
+    window.addEventListener('error', function(event) {
+      console.error('❌ Global error:', event.error);
+      showError('An unexpected error occurred: ' + (event.error?.message || event.message || 'Unknown error'));
+    });
+
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error('❌ Unhandled promise rejection:', event.reason);
+      showError('A promise was rejected: ' + (event.reason?.toString() || 'Unknown error'));
+      event.preventDefault();
+    });
+
+    function showError(message) {
+      const errorDiv = document.getElementById('error-display');
+      if (errorDiv) {
+        errorDiv.querySelector('.error-message').textContent = message;
+        errorDiv.classList.add('visible');
+      }
+      const loadingScreen = document.querySelector('.loading-screen');
+      if (loadingScreen) {
+        loadingScreen.style.display = 'none';
+      }
+    }
+
+    console.log('🚀 Static HTML loaded at:', new Date().toISOString());
+  </script>
 </head>
 <body>
   <div id="root">
     <!-- Loading screen shown until React loads -->
-    <div class="loading-screen">
+    <div class="loading-screen" id="loading-screen">
       <div class="loading-spinner"></div>
+      <div class="loading-text">Loading BoltChef...</div>
+    </div>
+
+    <!-- Error display (hidden by default) -->
+    <div class="error-display" id="error-display">
+      <div class="error-title">⚠️ Application Failed to Load</div>
+      <div class="error-message"></div>
+      <button class="reload-button" onclick="window.location.reload()">
+        🔄 Reload Page
+      </button>
     </div>
   </div>
-  <!-- Remix will inject scripts here during build -->
+
+  <!-- Scripts will be injected by Remix/Vite build -->
 </body>
 </html>

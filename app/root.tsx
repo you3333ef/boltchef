@@ -10,6 +10,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { ClientOnly } from 'remix-utils/client-only';
 import { cssTransition, ToastContainer } from 'react-toastify';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 import reactToastifyStyles from 'react-toastify/dist/ReactToastify.css?url';
 import globalStyles from './styles/index.scss?url';
@@ -118,6 +119,11 @@ export default function App() {
   const theme = useStore(themeStore);
 
   useEffect(() => {
+    console.log('📱 App component mounted', {
+      theme,
+      timestamp: new Date().toISOString(),
+    });
+
     logStore.logSystem('Application initialized', {
       theme,
       platform: navigator.platform,
@@ -140,13 +146,16 @@ export default function App() {
         });
       })
       .catch((error) => {
+        console.error('❌ Failed to initialize debug logging:', error);
         logStore.logError('Failed to initialize debug logging', error);
       });
   }, []);
 
   return (
-    <Layout>
-      <Outlet />
-    </Layout>
+    <ErrorBoundary>
+      <Layout>
+        <Outlet />
+      </Layout>
+    </ErrorBoundary>
   );
 }
